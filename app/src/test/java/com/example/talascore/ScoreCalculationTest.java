@@ -5,13 +5,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test cases cho logic tính điểm Tá Lả
+ * Test cases cho logic tính điểm Tá Lả (Updated v1.1.0)
  * Các test case bao gồm:
  * 1. Ván không Ù - chơi bình thường
- * 2. Ù thường
- * 3. Ù khan
- * 4. Ù tròn
- * 5. Các trường hợp ăn cây khác nhau
+ * 2. Ù thường/khan/tròn
+ * 3. Ù đền (người BỊ ăn 3 cây trả thay)
+ * 4. Progressive eaten cards (cây 1=1đ, cây 2=2đ)
+ * 5. Điểm cơ bản chuẩn (tổng=0)
  */
 public class ScoreCalculationTest {
     
@@ -24,15 +24,15 @@ public class ScoreCalculationTest {
     private int[] ranking = new int[4];
     private int firstPlayerIndex = -1;
     
-    // Settings
-    private int perfectHandBonus = 60;
-    private int perfectHandKhanBonus = 90;
-    private int perfectHandRoundBonus = 120;
+    // Settings - Updated to match new logic
+    private int perfectHandBonus = 5;      // Penalty per person for normal Ù
+    private int perfectHandKhanBonus = 7;  // Penalty per person for khan Ù
+    private int perfectHandRoundBonus = 6; // Penalty per person for round Ù
     private int eatenCardFee = 1;
     private int lastCardFee = 4;
     private int momPenalty = 4;
-    private int firstPlayerBonus = 5;
-    private int eatenCardBonus = 5;
+    private int firstPlayerBonus = 0;      // No first player bonus in current rules
+    private int eatenCardBonus = 1;
     
     @Before
     public void setUp() {
@@ -78,9 +78,9 @@ public class ScoreCalculationTest {
         // Calculate scores
         calculateRankingScore();
         
-        // Expected results:
-        // A (nhất): 0 + 2*5 (ăn cây) + 5 (thưởng người đầu) = +15
-        // B (nhì): -1 + 1*5 (ăn cây) = +4  
+        // Expected results (NEW LOGIC):
+        // A (nhất): +6 + (1+2) (progressive cây ăn) = +9
+        // B (nhì): -1 + 1 (cây ăn) = 0
         // C (ba): -2 - 4 (móm) = -6
         // D (bét): -3 - 4 (móm) = -7
         
@@ -89,8 +89,8 @@ public class ScoreCalculationTest {
         System.out.println("C (ba): " + roundScores[2] + " điểm");
         System.out.println("D (bét): " + roundScores[3] + " điểm");
         
-        assertEquals("A (nhất) sai", 15, roundScores[0]);
-        assertEquals("B (nhì) sai", 4, roundScores[1]);
+        assertEquals("A (nhất) sai", 9, roundScores[0]);
+        assertEquals("B (nhì) sai", 0, roundScores[1]);
         assertEquals("C (ba) sai", -6, roundScores[2]);
         assertEquals("D (bét) sai", -7, roundScores[3]);
     }
@@ -108,19 +108,19 @@ public class ScoreCalculationTest {
         
         calculatePerfectHandScore(winnerIndex, false);
         
-        // Expected results:
-        // A: +60 (Ù thường) + 1*5 (ăn cây) = +65
-        // B, C, D: -20 (phạt Ù thường) = -20
+        // Expected results (NEW LOGIC):
+        // A: +15 (5*3) = +15
+        // B, C, D: -5 (phạt Ù thường) = -5
         
         System.out.println("A (Ù thường): " + roundScores[0] + " điểm");
         System.out.println("B: " + roundScores[1] + " điểm");
         System.out.println("C: " + roundScores[2] + " điểm");
         System.out.println("D: " + roundScores[3] + " điểm");
         
-        assertEquals("A (Ù thường) sai", 65, roundScores[0]);
-        assertEquals("B sai", -20, roundScores[1]);
-        assertEquals("C sai", -20, roundScores[2]);
-        assertEquals("D sai", -20, roundScores[3]);
+        assertEquals("A (Ù thường) sai", 15, roundScores[0]);
+        assertEquals("B sai", -5, roundScores[1]);
+        assertEquals("C sai", -5, roundScores[2]);
+        assertEquals("D sai", -5, roundScores[3]);
     }
     
     /**
@@ -230,75 +230,115 @@ public class ScoreCalculationTest {
     }
     
     /**
-     * Test Case 6: Ù khan không ăn cây nào
+     * Test Case 6: Ù đền - Logic chuẩn
+     * A Ù thường, D bị ăn 3 cây (victim)
+     */
+    @Test
+    public void testPerfectHandDen() {
+        System.out.println("=== Test Case 6: Ù đền (Logic chuẩn) ===");
+
+        int winnerIndex = 0; // A Ù thường
+        int victimIndex = 3; // D bị ăn 3 cây
+
+        calculatePerfectHandDenScore(winnerIndex, victimIndex, false);
+
+        // Expected results (NEW LOGIC):
+        // A (Ù): +15 điểm (5*3)
+        // D (victim): -15 điểm (trả thay cho tất cả)
+        // B, C: 0 điểm (không mất gì)
+
+        System.out.println("A (Ù thường): " + roundScores[0] + " điểm");
+        System.out.println("B: " + roundScores[1] + " điểm");
+        System.out.println("C: " + roundScores[2] + " điểm");
+        System.out.println("D (victim): " + roundScores[3] + " điểm");
+
+        assertEquals("A (Ù thường) sai", 15, roundScores[0]);
+        assertEquals("B sai", 0, roundScores[1]);
+        assertEquals("C sai", 0, roundScores[2]);
+        assertEquals("D (victim) sai", -15, roundScores[3]);
+    }
+
+    /**
+     * Test Case 7: Ù khan không ăn cây nào
      * A Ù khan, không ăn cây nào
      */
     @Test
     public void testPerfectHandKhanNoCards() {
-        System.out.println("=== Test Case 6: Ù khan không ăn cây ===");
-        
+        System.out.println("=== Test Case 7: Ù khan không ăn cây ===");
+
         int winnerIndex = 0; // A Ù khan
         cardsEaten[winnerIndex] = 0; // Không ăn cây nào
-        
+
         calculatePerfectHandScore(winnerIndex, true);
-        
-        // Expected results:
-        // A: +90 (Ù khan) + 0*5 (ăn cây) = +90
-        // B, C, D: -30 (phạt Ù khan) = -30
-        
+
+        // Expected results (NEW LOGIC):
+        // A: +21 (7*3) = +21
+        // B, C, D: -7 (phạt Ù khan) = -7
+
         System.out.println("A (Ù khan): " + roundScores[0] + " điểm");
         System.out.println("B: " + roundScores[1] + " điểm");
         System.out.println("C: " + roundScores[2] + " điểm");
         System.out.println("D: " + roundScores[3] + " điểm");
-        
-        assertEquals("A (Ù khan) sai", 90, roundScores[0]);
-        assertEquals("B sai", -30, roundScores[1]);
-        assertEquals("C sai", -30, roundScores[2]);
-        assertEquals("D sai", -30, roundScores[3]);
+
+        assertEquals("A (Ù khan) sai", 21, roundScores[0]);
+        assertEquals("B sai", -7, roundScores[1]);
+        assertEquals("C sai", -7, roundScores[2]);
+        assertEquals("D sai", -7, roundScores[3]);
     }
     
-    // Helper methods (copy from MainActivity)
+    // Helper methods (updated for new logic)
+    private void calculatePerfectHandDenScore(int winnerIndex, int victimIndex, boolean isRound) {
+        // Reset round scores
+        for (int i = 0; i < 4; i++) {
+            roundScores[i] = 0;
+        }
+
+        // Calculate total penalty
+        int penaltyPerPerson = isRound ? perfectHandRoundBonus : perfectHandBonus;
+        int totalPenalty = penaltyPerPerson * 3;
+
+        // Winner gets total penalty
+        roundScores[winnerIndex] = totalPenalty;
+
+        // Victim pays total penalty
+        roundScores[victimIndex] = -totalPenalty;
+
+        // Others get 0 (already set by Arrays.fill)
+    }
+
     private void calculatePerfectHandScore(int winnerIndex, boolean isKhan) {
         // Reset round scores
         for (int i = 0; i < 4; i++) {
             roundScores[i] = 0;
         }
         
-        // Calculate bonus based on type
-        int bonus = perfectHandBonus; // Default
+        // Calculate penalty per person based on type
+        int penaltyPerPerson;
         if (isKhan) {
-            bonus = perfectHandKhanBonus;
+            penaltyPerPerson = perfectHandKhanBonus; // 7 per person
         } else {
-            // Check if it's round hand (this would need to be passed as parameter in real implementation)
-            bonus = perfectHandRoundBonus; // Assume round for this test
+            penaltyPerPerson = perfectHandBonus; // 5 per person (normal Ù)
         }
-        
-        // Winner gets bonus
-        roundScores[winnerIndex] = bonus;
-        
-        // Others lose points
-        int penalty = bonus / 3; // Divide bonus by 3 for penalty
+
+        // Winner gets total (penalty per person * 3)
+        roundScores[winnerIndex] = penaltyPerPerson * 3;
+
+        // Others lose penalty per person
         for (int i = 0; i < 4; i++) {
             if (i != winnerIndex) {
-                roundScores[i] = -penalty;
+                roundScores[i] = -penaltyPerPerson;
             }
-        }
-        
-        // Add eaten cards bonus for winner
-        int eatenCardsCount = cardsEaten[winnerIndex];
-        if (eatenCardsCount > 0) {
-            roundScores[winnerIndex] += eatenCardsCount * eatenCardBonus;
         }
     }
     
     private void calculateRankingScore() {
         int[] roundPoints = new int[4];
 
-        // Base points from ranking
-        roundPoints[ranking[0]] = 0; // 1st
-        roundPoints[ranking[1]] = -1; // 2nd
-        roundPoints[ranking[2]] = -2; // 3rd
-        roundPoints[ranking[3]] = -3; // 4th
+        // Base points from ranking (NEW LOGIC)
+        roundPoints[ranking[0]] = 6; // 1st: +6
+        roundPoints[ranking[1]] = -1; // 2nd: -1
+        roundPoints[ranking[2]] = -2; // 3rd: -2
+        roundPoints[ranking[3]] = -3; // 4th: -3
         
         // Mom penalty
         for (int i = 0; i < 4; i++) {
@@ -307,27 +347,20 @@ public class ScoreCalculationTest {
             }
         }
         
-        // First player bonus if all móm
-        boolean allMom = true;
-        for (int i = 0; i < 4; i++) {
-            if (!wasMom[i]) {
-                allMom = false;
-                break;
-            }
-        }
-        
-        if (allMom && firstPlayerIndex != -1) {
-            roundPoints[firstPlayerIndex] += firstPlayerBonus;
-        }
+        // No first player bonus in current rules
 
         // Card fees - calculate based on actual eaten cards
         int totalPointsLost = 0;
         int cardsEatenByWinner = cardsEaten[ranking[0]];
         int lastCardsByWinner = lastCardsEaten[ranking[0]];
         
-        // Add eaten cards bonus for winner
+        // Add eaten cards bonus for winner (progressive: 1st card = 1pt, 2nd card = 2pt)
         if (cardsEatenByWinner > 0) {
-            roundPoints[ranking[0]] += cardsEatenByWinner * eatenCardBonus;
+            int progressiveBonus = 0;
+            for (int cardNum = 1; cardNum <= cardsEatenByWinner; cardNum++) {
+                progressiveBonus += cardNum; // 1st card = 1, 2nd card = 2, etc.
+            }
+            roundPoints[ranking[0]] += progressiveBonus;
         }
         
         // Tính điểm theo vòng kim đồng hồ

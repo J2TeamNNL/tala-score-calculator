@@ -475,7 +475,86 @@
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
-        <!-- Step 5: Eaten Cards for Perfect Hand -->
+        <!-- Step 3: Ù Đền Selection -->
+        <LinearLayout
+            android:id="@+id/layout_step_den_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/card_color">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Có phải Ù đền không?"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ù đền: Có người bị ăn 3 cây để làm người khác Ù"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cb_is_den"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Có Ù đền"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ai bị ăn 3 cây?"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="8dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rg_den_victim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+                        <!-- Radio buttons will be added dynamically -->
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btn_confirm_den_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Tiếp tục"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/accent_color"
+                        app:cornerRadius="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 4: Eaten Cards for Perfect Hand -->
         <LinearLayout
             android:id="@+id/step_eaten_cards"
             android:layout_width="match_parent"
@@ -551,12 +630,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ăn 2 cây"
                                     android:textColor="@color/text_primary"/>
-                                <RadioButton
-                                    android:id="@+id/rb_player1_eaten_3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Ăn 3 cây (Ù đền)"
-                                    android:textColor="@color/text_primary"/>
+
                             </RadioGroup>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -609,12 +683,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ăn 2 cây"
                                     android:textColor="@color/text_primary"/>
-                                <RadioButton
-                                    android:id="@+id/rb_player2_eaten_3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Ăn 3 cây (Ù đền)"
-                                    android:textColor="@color/text_primary"/>
+
                             </RadioGroup>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -667,12 +736,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ăn 2 cây"
                                     android:textColor="@color/text_primary"/>
-                                <RadioButton
-                                    android:id="@+id/rb_player3_eaten_3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Ăn 3 cây (Ù đền)"
-                                    android:textColor="@color/text_primary"/>
+
                             </RadioGroup>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -725,12 +789,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Ăn 2 cây"
                                     android:textColor="@color/text_primary"/>
-                                <RadioButton
-                                    android:id="@+id/rb_player4_eaten_3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Ăn 3 cây (Ù đền)"
-                                    android:textColor="@color/text_primary"/>
+
                             </RadioGroup>
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>

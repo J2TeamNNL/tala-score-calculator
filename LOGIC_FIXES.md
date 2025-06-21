@@ -2,30 +2,47 @@
 
 ## 📋 Tóm tắt các lỗi logic chính đã sửa:
 
-### 1. **Sai điểm cơ bản theo thứ hạng** ✅
+### 1. **SAI LOGIC Ù ĐỀN (Lỗi nghiêm trọng)** ✅
+**Vấn đề:** Code tính người **ĂN** 3 cây phải trả thay
+**Thực tế:** Người **BỊ ĂN** 3 cây phải trả thay cho tất cả
+**Sửa:**
+- Thêm UI step riêng cho Ù đền selection
+- Checkbox "Có Ù đền" + RadioGroup chọn victim
+- Logic: `perfectHandDenVictim` trả thay, người khác được 0 điểm
+
+### 2. **Sai điểm cơ bản theo thứ hạng** ✅
 **Vấn đề:** Nhất: +3, Nhì: +1, Ba: -1, Bét: -3 (tổng ≠ 0)
 **Sửa:** Nhất: +6, Nhì: -1, Ba: -2, Bét: -3 (tổng = 0)
 
-### 2. **Sai logic tính điểm Ù** ✅
+### 3. **Sai logic tính điểm Ù** ✅
 **Vấn đề:** Sử dụng công thức chia penalty/3 không chính xác
 **Sửa:**
 - Ù thường: mỗi người thua -5 điểm, người Ù +15 điểm
 - Ù khan: mỗi người thua -7 điểm, người Ù +21 điểm
 - Ù tròn: mỗi người thua -6 điểm, người Ù +18 điểm
 
-### 3. **Sai logic điểm cây ăn** ✅
+### 4. **Sai logic điểm cây ăn** ✅
 **Vấn đề:** Cây thứ 2 chỉ được 1 điểm như cây thứ 1
-**Sửa:** Cây 1 = 1 điểm, cây 2 = 2 điểm (tăng dần)
+**Sửa:** Cây 1 = 1 điểm, cây 2 = 2 điểm (progressive)
 
-### 4. **Sai logic first player bonus** ✅
+### 5. **Sai logic first player bonus** ✅
 **Vấn đề:** Có logic thưởng người chơi đầu tiên
 **Sửa:** Loại bỏ hoàn toàn (theo luật hiện tại không có)
 
-### 5. **Sai tên settings keys** ✅
-**Vấn đề:** Code load settings với tên khác với preferences.xml
-**Sửa:** Đồng bộ tên keys và default values
+### 6. **Sai flow navigation** ✅
+**Vấn đề:** Flow không rõ ràng, thiếu step cho Ù đền
+**Sửa:** Cải thiện thành 8 steps với wizard-style navigation
 
 ## 🎯 Logic đúng sau khi sửa:
+
+### **Flow chuẩn (8 steps):**
+1. **Names:** Nhập tên 4 người chơi
+2. **Perfect Hand:** Chọn ai Ù + loại Ù
+3. **Ù Đền Selection:** Checkbox + chọn victim (nếu Ù thường/tròn)
+4. **Eaten Cards:** Nhập cây ăn 0-2 (nếu không Ù đền)
+5. **First Player:** Chọn người đầu (nếu không Ù)
+6. **Ranking:** Xếp hạng + cây ăn + móm (nếu không Ù)
+7. **Results:** Hiển thị kết quả chi tiết
 
 ### **Điểm cơ bản (tổng = 0):**
 - **Nhất:** +6 điểm
@@ -33,21 +50,27 @@
 - **Ba:** -2 điểm
 - **Bét:** -3 điểm
 
+### **Logic Ù đền chuẩn:**
+**Ví dụ:** A Ù thường, D bị ăn 3 cây
+- A nhận: +15 điểm (5×3)
+- D trả: -15 điểm (victim)
+- B, C: 0 điểm (không mất gì)
+
 ### **Logic Ù (configurable via settings):**
 - **Ù thường:** Mỗi người thua trả 5 điểm (default), người Ù nhận 15 điểm
 - **Ù khan:** Mỗi người thua trả 7 điểm (default), người Ù nhận 21 điểm
 - **Ù tròn:** Mỗi người thua trả 6 điểm (default), người Ù nhận 18 điểm
-- **Ù đền:** Người ăn 3 cây trả thay cho tất cả, người Ù nhận toàn bộ
 
-### **Logic cây ăn:**
+### **Logic cây ăn progressive:**
 - **Cây thứ 1:** +1 điểm cho người ăn, -1 điểm cho người bị ăn
 - **Cây thứ 2:** +2 điểm cho người ăn, -2 điểm cho người bị ăn
 - **Cây chốt:** Penalty thêm theo settings (default: 4 điểm)
 
-### **Settings được đồng bộ:**
-- Tất cả keys trong code khớp với preferences.xml
-- Default values phản ánh đúng luật chơi
-- UI settings hiển thị đúng ý nghĩa từng tham số
+### **UI/UX cải thiện:**
+- Material Design với wizard-style navigation
+- Back button hoạt động chính xác
+- Validation đầy đủ cho mọi input
+- Clear separation giữa các loại Ù
 
 ## 🧪 Các test case nên kiểm tra:
 

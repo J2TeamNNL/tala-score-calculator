@@ -1,23 +1,30 @@
 package com.example.talascore;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.google.android.material.textfield.TextInputEditText;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     // Constants for ViewFlipper children
     private static final int STEP_NAMES = 0;
     private static final int STEP_PERFECT_HAND = 1;
-    private static final int STEP_FIRST_PLAYER = 2;
-    private static final int STEP_RANKING = 3;
-    private static final int STEP_RESULTS = 4;
-    private static final int STEP_EATEN_CARDS = 5;
+    private static final int STEP_DEN_SELECTION = 2;  // New step for Ù đền victim selection
+    private static final int STEP_EATEN_CARDS = 3;    // Moved up
+    private static final int STEP_FIRST_PLAYER = 4;   // Moved down
+    private static final int STEP_RANKING = 5;        // Moved down
+    private static final int STEP_RESULTS = 6;        // Moved down
 
     // UI Components
     private ViewFlipper viewFlipper;
@@ -35,24 +42,29 @@ public class MainActivity extends AppCompatActivity {
     private Button btnNoPerfectHand;
     private Button btnConfirmPerfectHand;
 
-    // Step 3: First Player Selection
+    // Step 3: Ù Đền Selection
+    private CheckBox cbIsDen;
+    private RadioGroup rgDenVictim;
+    private Button btnConfirmDenSelection;
+
+    // Step 4: Eaten Cards for Perfect Hand
+    private RadioGroup[] rgPlayerEatenCards = new RadioGroup[4];
+    private TextView[] tvPlayerEatenNames = new TextView[4];
+    private Button btnConfirmEatenCards;
+
+    // Step 5: First Player Selection
     private RadioGroup rgFirstPlayer;
     private Button btnConfirmFirstPlayer;
 
-    // Step 4: Ranking
+    // Step 6: Ranking
     private TextView tvRankingTitle;
     private RadioGroup rgRankPlayer;
     private RadioGroup rgEatenCards;
     private Button btnConfirmRank;
 
-    // Step 5: Results
+    // Step 7: Results
     private TextView tvRoundResult, tvTotalScores;
     private Button btnNewRound, btnNewGameReset;
-    
-    // Step 5: Eaten Cards for Perfect Hand
-    private RadioGroup[] rgPlayerEatenCards = new RadioGroup[4];
-    private TextView[] tvPlayerEatenNames = new TextView[4];
-    private Button btnConfirmEatenCards;
     
     // Game State
     private String[] playerNames = new String[4];
@@ -69,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private int[] ranking = new int[4];
     private int firstPlayerIndex = -1;
     private boolean isPerfectHandDen = false; // Ù đền
-    private int perfectHandDenPlayer = -1; // Ai đền
+    private int perfectHandDenVictim = -1; // Ai BỊ ăn 3 cây (victim)
     
     // State for back navigation
     private int previousStep = -1;
@@ -132,6 +144,11 @@ public class MainActivity extends AppCompatActivity {
             btnNoPerfectHand = findViewById(R.id.btn_no_perfect_hand);
             btnConfirmPerfectHand = findViewById(R.id.btn_confirm_perfect_hand);
 
+            // Ù Đền Selection
+            cbIsDen = findViewById(R.id.cb_is_den);
+            rgDenVictim = findViewById(R.id.rg_den_victim);
+            btnConfirmDenSelection = findViewById(R.id.btn_confirm_den_selection);
+
             // First Player Selection
             rgFirstPlayer = findViewById(R.id.rg_first_player);
             btnConfirmFirstPlayer = findViewById(R.id.btn_confirm_first_player);
@@ -175,17 +192,22 @@ public class MainActivity extends AppCompatActivity {
         btnConfirmNames.setOnClickListener(v -> onConfirmNames());
         btnNoPerfectHand.setOnClickListener(v -> onNoPerfectHand());
         btnConfirmPerfectHand.setOnClickListener(v -> onConfirmPerfectHand());
+        btnConfirmDenSelection.setOnClickListener(v -> onConfirmDenSelection());
+        btnConfirmEatenCards.setOnClickListener(v -> onConfirmEatenCards());
         btnConfirmFirstPlayer.setOnClickListener(v -> onConfirmFirstPlayer());
         btnConfirmRank.setOnClickListener(v -> onConfirmRank());
         btnNewRound.setOnClickListener(v -> startNewRound());
         btnNewGameReset.setOnClickListener(v -> startNewGame());
-        btnConfirmEatenCards.setOnClickListener(v -> onConfirmEatenCards());
         btnBack.setOnClickListener(v -> goBack());
         btnHelp.setOnClickListener(v -> showHelpForCurrentStep());
         
         rgPerfectHand.setOnCheckedChangeListener((group, checkedId) -> {
             boolean hasWinner = checkedId != -1;
             rgPerfectHandType.setVisibility(hasWinner ? View.VISIBLE : View.GONE);
+        });
+
+        cbIsDen.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rgDenVictim.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         });
     }
     //endregion
@@ -219,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
         isPerfectHandRound = false;
         isPerfectHand = false;
         isPerfectHandDen = false;
-        perfectHandDenPlayer = -1;
+        perfectHandDenVictim = -1;
         currentRankingStep = 0;
         Arrays.fill(ranking, -1);
         firstPlayerIndex = -1;
@@ -257,8 +279,8 @@ public class MainActivity extends AppCompatActivity {
         // Auto-select first player (first player in the list)
         firstPlayerIndex = 0;
         
-        setupRankingStep();
-        viewFlipper.setDisplayedChild(STEP_RANKING);
+        setupFirstPlayerSelection();
+        viewFlipper.setDisplayedChild(STEP_FIRST_PLAYER);
         updateBackButton();
     }
 
@@ -292,7 +314,53 @@ public class MainActivity extends AppCompatActivity {
             calculatePerfectHandScore(perfectHandPlayer, true);
             viewFlipper.setDisplayedChild(STEP_RESULTS);
         } else {
-            // For normal and round perfect hands, ask for eaten cards for all players
+            // For normal and round perfect hands, check for Ù đền first
+            setupDenSelection();
+            viewFlipper.setDisplayedChild(STEP_DEN_SELECTION);
+        }
+        updateBackButton();
+    }
+    //endregion
+
+    //region Ù Đền Selection
+    private void setupDenSelection() {
+        // Reset den state
+        isPerfectHandDen = false;
+        perfectHandDenVictim = -1;
+        cbIsDen.setChecked(false);
+
+        // Setup victim selection
+        rgDenVictim.removeAllViews();
+        rgDenVictim.setVisibility(View.GONE);
+
+        for (int i = 0; i < 4; i++) {
+            if (i != perfectHandPlayer) { // Can't be victim of yourself
+                RadioButton rb = new RadioButton(this);
+                rb.setText(playerNames[i] + " bị ăn 3 cây");
+                rb.setTextColor(getResources().getColor(R.color.text_primary));
+                rb.setId(i);
+                rgDenVictim.addView(rb);
+            }
+        }
+    }
+
+    private void onConfirmDenSelection() {
+        isPerfectHandDen = cbIsDen.isChecked();
+
+        if (isPerfectHandDen) {
+            // Must select victim
+            int victimId = rgDenVictim.getCheckedRadioButtonId();
+            if (victimId == -1) {
+                Toast.makeText(this, "Vui lòng chọn ai bị ăn 3 cây", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            perfectHandDenVictim = victimId;
+
+            // For Ù đền, calculate immediately (no need for eaten cards input)
+            calculatePerfectHandScoreWithEatenCards();
+            viewFlipper.setDisplayedChild(STEP_RESULTS);
+        } else {
+            // Normal Ù, ask for eaten cards
             setupEatenCardsForPerfectHand();
             viewFlipper.setDisplayedChild(STEP_EATEN_CARDS);
         }
@@ -486,8 +554,8 @@ public class MainActivity extends AppCompatActivity {
             // Winner gets total penalty
             roundPoints[perfectHandPlayer] = totalBasePenalty;
 
-            // Person who gave 3 cards pays total penalty
-            roundPoints[perfectHandDenPlayer] = -totalBasePenalty;
+            // Person who was eaten 3 cards pays total penalty (victim)
+            roundPoints[perfectHandDenVictim] = -totalBasePenalty;
 
             // Others get 0 points (already set by Arrays.fill)
         }
@@ -750,43 +818,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onConfirmEatenCards() {
-        // Reset Ù đền state
-        isPerfectHandDen = false;
-        perfectHandDenPlayer = -1;
-
-        // Get eaten cards for all players
+        // Get eaten cards for all players (only 0, 1, 2 - no 3 cards option here)
         int[][] eatenCardIds = {
-            {R.id.rb_player1_eaten_0, R.id.rb_player1_eaten_1, R.id.rb_player1_eaten_2, R.id.rb_player1_eaten_3},
-            {R.id.rb_player2_eaten_0, R.id.rb_player2_eaten_1, R.id.rb_player2_eaten_2, R.id.rb_player2_eaten_3},
-            {R.id.rb_player3_eaten_0, R.id.rb_player3_eaten_1, R.id.rb_player3_eaten_2, R.id.rb_player3_eaten_3},
-            {R.id.rb_player4_eaten_0, R.id.rb_player4_eaten_1, R.id.rb_player4_eaten_2, R.id.rb_player4_eaten_3}
+            {R.id.rb_player1_eaten_0, R.id.rb_player1_eaten_1, R.id.rb_player1_eaten_2},
+            {R.id.rb_player2_eaten_0, R.id.rb_player2_eaten_1, R.id.rb_player2_eaten_2},
+            {R.id.rb_player3_eaten_0, R.id.rb_player3_eaten_1, R.id.rb_player3_eaten_2},
+            {R.id.rb_player4_eaten_0, R.id.rb_player4_eaten_1, R.id.rb_player4_eaten_2}
         };
 
         for (int i = 0; i < 4; i++) {
             int eatenCardsId = rgPlayerEatenCards[i].getCheckedRadioButtonId();
             int eatenCards = 0;
 
-            // Determine eaten cards based on radio button ID
-            for (int j = 0; j < 4; j++) {
+            // Determine eaten cards based on radio button ID (0, 1, or 2 only)
+            for (int j = 0; j < 3; j++) {
                 if (eatenCardsId == eatenCardIds[i][j]) {
                     eatenCards = j;
                     break;
                 }
             }
 
-            // Check for Ù đền (3 cards eaten)
-            if (eatenCards == 3) {
-                // This is Ù đền - someone gave 3 cards to make someone else Ù
-                // Only one person can be Ù đền per round
-                if (!isPerfectHandDen) {
-                    isPerfectHandDen = true;
-                    perfectHandDenPlayer = i;
-                }
-            }
-
             cardsEaten[i] = eatenCards;
         }
-        
+
         // Calculate perfect hand score with eaten cards penalty
         calculatePerfectHandScoreWithEatenCards();
         viewFlipper.setDisplayedChild(STEP_RESULTS);
