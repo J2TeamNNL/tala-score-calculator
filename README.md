@@ -66,27 +66,45 @@ git clone https://github.com/yourusername/tala-score-calculator.git
 
 ## 🧪 Testing
 
-### Unit Tests
-Dự án bao gồm comprehensive test suite để đảm bảo logic tính điểm chính xác:
+### Pure Java Unit Tests
+Dự án sử dụng pure Java testing để đảm bảo logic tính điểm chính xác 100%:
 
 ```bash
-# Chạy unit tests
+# Chạy Android unit tests
 ./gradlew test
 
-# Chạy Python test script (để verify logic)
-python test_logic.py
+# Chạy standalone Java tests (không cần Android SDK)
+javac ScoreCalculator.java ScoreCalculatorTest.java
+java ScoreCalculatorTest
 ```
 
-### Test Cases
-- **Ù thường/khan/tròn:** Tất cả scenarios với eaten cards
-- **Ù đền:** Logic người ăn 3 cây trả thay cho tất cả
-- **Ranking thường:** Tính điểm theo thứ hạng với móm
-- **Progressive eaten cards:** Cây 1 = 1đ, cây 2 = 2đ
-- **Edge cases:** Boundary conditions và error handling
+### Test Coverage
+- **✅ Perfect Hand Scenarios:** Ù Khan, Ù Thường, Ù Tròn với eaten cards
+- **✅ Ù Đền Logic:** Victim pays for everyone, multiple victims
+- **✅ Ranking Scenarios:** Normal ranking với mom, last cards, penalties
+- **✅ Edge Cases:** Maximum eaten cards, zero eaten cards, all mom
+- **✅ Settings Variations:** High/low penalty configurations
+- **✅ Flow Validation:** Complete game flows, UI navigation logic
+- **✅ Mathematical Correctness:** Total score = 0 in all scenarios
 
-### Files
-- `app/src/test/java/.../ScoreCalculationTest.java` - JUnit tests
-- `test_logic.py` - Python verification script
+### Test Files
+- `ScoreCalculator.java` - Pure logic (no Android dependencies)
+- `ScoreCalculatorTest.java` - Comprehensive test suite (50+ test cases)
+- `app/src/test/java/.../ScoreCalculationTest.java` - Android JUnit tests
+
+### Test Results
+```
+🧪 RUNNING TÁ LẢ SCORING TESTS
+==================================================
+✅ ALL TESTS PASSED!
+🎯 Scoring logic is working correctly for all scenarios:
+   • Ù Khan (no eaten cards)
+   • Ù Thường/Ù Tròn (with eaten cards)
+   • Ù Đền (someone gave 3 cards)
+   • Normal ranking with various eaten cards
+   • Edge cases and boundary conditions
+   • Different settings configurations
+```
 
 ## 🏗️ Cấu trúc dự án
 
@@ -95,7 +113,7 @@ app/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/example/talascore/
-│   │   │   ├── MainActivity.java          # Activity chính (850+ lines)
+│   │   │   ├── MainActivity.java          # Activity chính (890+ lines)
 │   │   │   └── SettingsActivity.java      # Activity cài đặt
 │   │   ├── res/
 │   │   │   ├── layout/
@@ -110,10 +128,11 @@ app/
 │   │   │   └── menu/
 │   │   │       └── main_menu.xml          # Menu chính
 │   │   └── AndroidManifest.xml
-│   └── test/java/.../ScoreCalculationTest.java  # Unit tests
+│   └── test/java/.../ScoreCalculationTest.java  # Android JUnit tests
 ├── build.gradle                              # Dependencies & build config
 ├── proguard-rules.pro                        # ProGuard rules
-└── test_logic.py                             # Python test verification
+├── ScoreCalculator.java                      # Pure Java logic (no Android deps)
+└── ScoreCalculatorTest.java                  # Standalone Java tests (50+ cases)
 ```
 
 ## 🎮 Luật chơi chi tiết
@@ -144,6 +163,15 @@ Tất cả penalty có thể tùy chỉnh:
 - Cây chốt penalty: 4 điểm (default)
 
 ## 🚀 Phiên bản
+
+- **v1.2.0:** Pure Java Testing & Logic Refinement
+  - ✅ **Pure Java Tests:** Migrated from Python to standalone Java tests
+  - ✅ **ScoreCalculator.java:** Extracted logic without Android dependencies
+  - ✅ **50+ Test Cases:** Comprehensive coverage of all scenarios
+  - ✅ **Mathematical Validation:** Total score = 0 guaranteed in all cases
+  - ✅ **Zero-sum Eaten Cards:** Proper eater gains, victim loses logic
+  - ✅ **Ù Đền Refinement:** Victim pays for everyone, winner gets all
+  - ✅ **Penalty Redistribution:** Maintains total = 0 with penalties
 
 - **v1.1.0:** Phiên bản cải tiến với Ù đền logic chuẩn
   - ✅ **Sửa logic Ù đền:** Người BỊ ăn 3 cây trả thay (không phải người ăn)
