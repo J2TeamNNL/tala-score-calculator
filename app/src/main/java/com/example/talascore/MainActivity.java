@@ -19,14 +19,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Constants for ViewFlipper children
+    // Constants for ViewFlipper children (match XML order)
     private static final int STEP_NAMES = 0;
     private static final int STEP_PERFECT_HAND = 1;
-    private static final int STEP_DEN_SELECTION = 2;  // New step for Ù đền victim selection
-    private static final int STEP_EATEN_CARDS = 3;    // Moved up
-    private static final int STEP_FIRST_PLAYER = 4;   // Moved down
-    private static final int STEP_RANKING = 5;        // Moved down
-    private static final int STEP_RESULTS = 6;        // Moved down
+    private static final int STEP_FIRST_PLAYER = 2;   // Fixed: First Player is index 2
+    private static final int STEP_RANKING = 3;        // Fixed: Ranking is index 3
+    private static final int STEP_RESULTS = 4;        // Fixed: Results is index 4
+    private static final int STEP_DEN_SELECTION = 5;  // Fixed: Ù Đền is index 5
+    private static final int STEP_EATEN_CARDS = 6;    // Fixed: Eaten Cards is index 6
 
     // UI Components
     private ViewFlipper viewFlipper;
@@ -196,7 +196,10 @@ public class MainActivity extends AppCompatActivity {
         btnConfirmPerfectHand.setOnClickListener(v -> onConfirmPerfectHand());
         btnConfirmDenSelection.setOnClickListener(v -> onConfirmDenSelection());
         btnConfirmEatenCards.setOnClickListener(v -> onConfirmEatenCards());
-        btnConfirmFirstPlayer.setOnClickListener(v -> onConfirmFirstPlayer());
+        btnConfirmFirstPlayer.setOnClickListener(v -> {
+            android.util.Log.d("TalaScore", "btnConfirmFirstPlayer clicked!");
+            onConfirmFirstPlayer();
+        });
         btnConfirmRank.setOnClickListener(v -> onConfirmRank());
         btnNewRound.setOnClickListener(v -> startNewRound());
         btnNewGameReset.setOnClickListener(v -> startNewGame());
@@ -283,8 +286,11 @@ public class MainActivity extends AppCompatActivity {
         firstPlayerIndex = 0;
 
         setupFirstPlayerSelection();
+        android.util.Log.d("TalaScore", "ViewFlipper child count: " + viewFlipper.getChildCount());
+        android.util.Log.d("TalaScore", "Current displayed child: " + viewFlipper.getDisplayedChild());
         viewFlipper.setDisplayedChild(STEP_FIRST_PLAYER);
         android.util.Log.d("TalaScore", "Switched to STEP_FIRST_PLAYER: " + STEP_FIRST_PLAYER);
+        android.util.Log.d("TalaScore", "After switch, displayed child: " + viewFlipper.getDisplayedChild());
         updateBackButton();
     }
 
@@ -374,8 +380,9 @@ public class MainActivity extends AppCompatActivity {
 
     //region First Player Selection
     private void setupFirstPlayerSelection() {
+        android.util.Log.d("TalaScore", "setupFirstPlayerSelection() called");
         rgFirstPlayer.removeAllViews();
-        
+
         for (int i = 0; i < 4; i++) {
             RadioButton rb = new RadioButton(this);
             rb.setText(playerNames[i]);
@@ -383,9 +390,10 @@ public class MainActivity extends AppCompatActivity {
             rb.setId(i);
             rgFirstPlayer.addView(rb);
         }
-        
+
         // Auto-select first player (first in the list)
         rgFirstPlayer.check(0);
+        android.util.Log.d("TalaScore", "Auto-selected first player (index 0)");
     }
 
     private void onConfirmFirstPlayer() {

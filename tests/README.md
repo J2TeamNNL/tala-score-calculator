@@ -4,22 +4,30 @@ This directory contains standalone Java tests that verify the scoring logic with
 
 ## 📁 Files
 
-### `ScoreCalculator.java`
-- **Pure Java logic** for Tá Lả scoring
-- **No Android dependencies** - can run anywhere with Java
-- **Production-ready code** that mirrors MainActivity logic
-- **Zero-sum mathematics** - total score always equals 0
+### Core Logic
+- **`ScoreCalculator.java`** - Pure Java logic for Tá Lả scoring
+  - No Android dependencies - can run anywhere with Java
+  - Production-ready code that mirrors MainActivity logic
+  - Zero-sum mathematics - total score always equals 0
 
-### `ScoreCalculatorTest.java`
-- **Comprehensive test suite** with 50+ test cases
-- **Complete coverage** of all game scenarios
-- **Mathematical validation** ensures total = 0
-- **Migrated from Python** with enhanced logic
+### Test Suites (Separated by Responsibility)
+- **`ScoreCalculatorTest.java`** - Business Logic Tests
+  - Mathematical correctness and game rules validation
+  - Perfect Hand, Ranking, Edge Cases, Settings variations
+  - 40+ test cases focused on scoring calculations
 
-### `SimpleJavaTest.java`
-- **Basic test example** for quick verification
-- **Minimal test cases** for core functionality
-- **Learning reference** for test structure
+- **`UIFlowTest.java`** - UI Flow Tests
+  - Navigation flow and UI constants validation
+  - Step transitions and ViewFlipper index verification
+  - Flow scenarios: No Winner, Perfect Hand, Navigation
+
+- **`TestRunner.java`** - Test Orchestrator
+  - Runs all test suites in organized phases
+  - Provides comprehensive test coverage summary
+  - Single entry point for all testing
+
+### Legacy
+- **`SimpleJavaTest.java`** - Basic test example for reference
 
 ## 🚀 How to Run
 
@@ -35,11 +43,13 @@ cd tests
 # Compile all Java files
 javac *.java
 
-# Run comprehensive test suite
-java ScoreCalculatorTest
+# Run all test suites (recommended)
+java TestRunner
 
-# Run simple test (optional)
-java SimpleJavaTest
+# Or run individual test suites:
+java ScoreCalculatorTest  # Business logic only
+java UIFlowTest          # UI flow only
+java SimpleJavaTest      # Basic example
 ```
 
 ### Expected Output

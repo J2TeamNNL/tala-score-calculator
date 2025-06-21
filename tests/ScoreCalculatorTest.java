@@ -1,6 +1,6 @@
 /**
- * Pure Java test for Tá Lả scoring logic
- * No dependencies - can run with just Java
+ * Business Logic Test - Tests scoring calculations and game rules
+ * Focuses on mathematical correctness and business rules validation
  */
 public class ScoreCalculatorTest {
     
@@ -9,7 +9,7 @@ public class ScoreCalculatorTest {
     private static int passCount = 0;
     
     public static void main(String[] args) {
-        System.out.println("🧪 RUNNING TÁ LẢ SCORING TESTS");
+        System.out.println("🧮 RUNNING BUSINESS LOGIC TESTS");
         System.out.println("=".repeat(50));
 
         try {
@@ -20,18 +20,18 @@ public class ScoreCalculatorTest {
             testSettingsVariations();
             testDenScenarios();
             testFlowScenarios();
-            testUIFlowValidation();
 
             // Summary
             System.out.println("\n" + "=".repeat(50));
-            System.out.println("✅ ALL TESTS PASSED!");
-            System.out.println("🎯 Scoring logic is working correctly for all scenarios:");
+            System.out.println("✅ ALL BUSINESS LOGIC TESTS PASSED!");
+            System.out.println("🎯 Scoring calculations are mathematically correct:");
             System.out.println("   • Ù Khan (no eaten cards)");
             System.out.println("   • Ù Thường/Ù Tròn (with eaten cards)");
-            System.out.println("   • Ù Đền (someone gave 3 cards)");
+            System.out.println("   • Ù Đền (victim pays for everyone)");
             System.out.println("   • Normal ranking with various eaten cards");
             System.out.println("   • Edge cases and boundary conditions");
             System.out.println("   • Different settings configurations");
+            System.out.println("   • Mathematical validation (total = 0)");
 
         } catch (AssertionError e) {
             System.out.println("\n❌ TEST FAILED: " + e.getMessage());
@@ -347,50 +347,7 @@ public class ScoreCalculatorTest {
         System.out.println("   ✅ Complete normal ranking flow passed");
     }
 
-    private static void testUIFlowValidation() {
-        System.out.println("\n=== TESTING UI FLOW VALIDATION ===");
 
-        ScoreCalculator.Settings testSettings = new ScoreCalculator.Settings();
-        testSettings.perfectHandBonus = 10;
-        testSettings.perfectHandKhanBonus = 20;
-        testSettings.perfectHandRoundBonus = 30;
-
-        // Test 1: Ù khan should skip eaten cards input
-        System.out.println("\n1. Ù khan should skip eaten cards input");
-        int winner = 0;
-        boolean isKhan = true;
-        // Even if we pass eaten cards, Ù khan should ignore them
-        int[] eatenCards = {1, 2, 0, 1};
-        int[] result = ScoreCalculator.calculatePerfectHandWithEatenCards(winner, eatenCards, isKhan, false, testSettings);
-
-        assertTotalZero("Ù khan ignores eaten cards", result);
-        System.out.println("   Result: " + arrayToString(result) + " (Total: " + getTotal(result) + ")");
-        System.out.println("   ✅ Ù khan ignores eaten cards passed");
-
-        // Test 2: Ù thường and Ù tròn should require eaten cards
-        System.out.println("\n2. Ù thường and Ù tròn should require eaten cards");
-        winner = 1;
-        isKhan = false;
-        boolean isRound = false;
-        int[] eatenCards2 = {0, 1, 2, 0};
-        result = ScoreCalculator.calculatePerfectHandWithEatenCards(winner, eatenCards2, isKhan, isRound, testSettings);
-
-        assertTotalZero("Ù thường with eaten cards", result);
-        System.out.println("   Result: " + arrayToString(result) + " (Total: " + getTotal(result) + ")");
-        System.out.println("   ✅ Ù thường with eaten cards passed");
-
-        // Test 3: Ù đền should override normal calculation
-        System.out.println("\n3. Ù đền should override normal calculation");
-        winner = 2;
-        isKhan = false;
-        isRound = false;
-        int[] eatenCards3 = {0, 0, 0, 3};  // Player 3 bị ăn 3 cây
-        result = ScoreCalculator.calculatePerfectHandWithEatenCards(winner, eatenCards3, isKhan, isRound, testSettings);
-
-        assertTotalZero("Ù đền overrides normal calculation", result);
-        System.out.println("   Result: " + arrayToString(result) + " (Total: " + getTotal(result) + ")");
-        System.out.println("   ✅ Ù đền overrides normal calculation passed");
-    }
 
     // Helper methods
     private static void assertArrayEquals(String testName, int[] expected, int[] actual) {
@@ -456,4 +413,6 @@ public class ScoreCalculatorTest {
         }
         return total;
     }
+
+
 }
