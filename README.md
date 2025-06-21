@@ -70,12 +70,13 @@ git clone https://github.com/yourusername/tala-score-calculator.git
 Dự án sử dụng pure Java testing để đảm bảo logic tính điểm chính xác 100%:
 
 ```bash
-# Chạy Android unit tests
-./gradlew test
-
 # Chạy standalone Java tests (không cần Android SDK)
-javac ScoreCalculator.java ScoreCalculatorTest.java
+cd tests
+javac *.java
 java ScoreCalculatorTest
+
+# Hoặc chạy test đơn giản
+java SimpleJavaTest
 ```
 
 ### Test Coverage
@@ -88,9 +89,10 @@ java ScoreCalculatorTest
 - **✅ Mathematical Correctness:** Total score = 0 in all scenarios
 
 ### Test Files
-- `ScoreCalculator.java` - Pure logic (no Android dependencies)
-- `ScoreCalculatorTest.java` - Comprehensive test suite (50+ test cases)
-- `app/src/test/java/.../ScoreCalculationTest.java` - Android JUnit tests
+- `tests/ScoreCalculator.java` - Pure logic (no Android dependencies)
+- `tests/ScoreCalculatorTest.java` - Comprehensive test suite (50+ test cases)
+- `tests/SimpleJavaTest.java` - Basic test examples
+- `tests/README.md` - Detailed testing documentation
 
 ### Test Results
 ```
@@ -128,11 +130,13 @@ app/
 │   │   │   └── menu/
 │   │   │       └── main_menu.xml          # Menu chính
 │   │   └── AndroidManifest.xml
-│   └── test/java/.../ScoreCalculationTest.java  # Android JUnit tests
-├── build.gradle                              # Dependencies & build config
-├── proguard-rules.pro                        # ProGuard rules
-├── ScoreCalculator.java                      # Pure Java logic (no Android deps)
-└── ScoreCalculatorTest.java                  # Standalone Java tests (50+ cases)
+├── tests/
+│   ├── ScoreCalculator.java               # Pure Java logic (no Android deps)
+│   ├── ScoreCalculatorTest.java           # Comprehensive test suite (50+ cases)
+│   ├── SimpleJavaTest.java                # Basic test examples
+│   └── README.md                          # Testing documentation
+├── build.gradle                           # Dependencies & build config
+└── proguard-rules.pro                     # ProGuard rules
 ```
 
 ## 🎮 Luật chơi chi tiết
