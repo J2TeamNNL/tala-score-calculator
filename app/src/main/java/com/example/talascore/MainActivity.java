@@ -275,14 +275,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onNoPerfectHand() {
+        android.util.Log.d("TalaScore", "onNoPerfectHand() called");
         isPerfectHand = false;
         perfectHandPlayer = -1;
-        
+
         // Auto-select first player (first player in the list)
         firstPlayerIndex = 0;
-        
+
         setupFirstPlayerSelection();
         viewFlipper.setDisplayedChild(STEP_FIRST_PLAYER);
+        android.util.Log.d("TalaScore", "Switched to STEP_FIRST_PLAYER: " + STEP_FIRST_PLAYER);
         updateBackButton();
     }
 
@@ -387,15 +389,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onConfirmFirstPlayer() {
+        android.util.Log.d("TalaScore", "onConfirmFirstPlayer() called");
         int checkedId = rgFirstPlayer.getCheckedRadioButtonId();
         if (checkedId == -1) {
             // If nothing selected, default to first player
             checkedId = 0;
         }
-        
+
         firstPlayerIndex = checkedId;
+        android.util.Log.d("TalaScore", "Selected first player: " + firstPlayerIndex);
         setupRankingStep();
         viewFlipper.setDisplayedChild(STEP_RANKING);
+        android.util.Log.d("TalaScore", "Switched to STEP_RANKING: " + STEP_RANKING);
         updateBackButton();
     }
     //endregion
