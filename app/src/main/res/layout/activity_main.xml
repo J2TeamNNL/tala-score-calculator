@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".MainActivity">
+
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Tính điểm Tá Lả"
+            app:titleTextColor="@color/white"
+            app:menu="@menu/main_menu">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Quay lại"
+                android:src="@android:drawable/ic_menu_revert"
+                android:tint="@color/white"
+                android:visibility="gone"/>
+
+            <ImageButton
+                android:id="@+id/btn_help"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Hướng dẫn"
+                android:src="@android:drawable/ic_menu_help"
+                android:tint="@color/white"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content -->
+    <ViewFlipper
+        android:id="@+id/view_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="16dp">
+
+        <!-- Step 1: Player Names -->
+        <LinearLayout
+            android:id="@+id/layout_step_names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/card_color">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nhập tên người chơi"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="Người chơi 1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_player1_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="Người chơi 2"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_player2_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="Người chơi 3"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_player3_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Người chơi 4"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_player4_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_confirm_names"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Bắt đầu chơi"
+                        app:cornerRadius="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 2: Perfect Hand (Ù) -->
+        <LinearLayout
+            android:id="@+id/layout_step_perfect_hand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/card_color">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Có ai Ù không?"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rg_perfect_hand_winner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <!-- Radio buttons will be added dynamically -->
+                    </RadioGroup>
+                    
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cb_khan_hand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ù khan (không có cạ)"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/text_primary"
+                        android:visibility="gone"/>
+
+                    <RadioGroup
+                        android:id="@+id/rg_perfect_hand_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone">
+                        <RadioButton
+                            android:id="@+id/rb_perfect_hand_normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ù thường"
+                            android:textColor="@color/text_primary"
+                            android:checked="true"/>
+                        <RadioButton
+                            android:id="@+id/rb_perfect_hand_khan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ù khan"
+                            android:textColor="@color/text_primary"/>
+                        <RadioButton
+                            android:id="@+id/rb_perfect_hand_round"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ù tròn"
+                            android:textColor="@color/text_primary"/>
+                    </RadioGroup>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_no_perfect_hand"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Không ai Ù, tính điểm thường"
+                        android:layout_marginTop="16dp"
+                        app:cornerRadius="8dp"/>
+                        
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_confirm_perfect_hand"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Xác nhận Ù"
+                        android:layout_marginTop="8dp"
+                        app:cornerRadius="8dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 3: First Player Selection -->
+        <LinearLayout
+            android:id="@+id/layout_step_first_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/card_color">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn người chơi đầu tiên"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Người chơi đầu tiên sẽ được cộng điểm nếu tất cả đều móm"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rg_first_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+                        <!-- Radio buttons will be added dynamically -->
+                    </RadioGroup>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_confirm_first_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Xác nhận"
+                        app:cornerRadius="8dp"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 4: Ranking -->
+          <LinearLayout
+            android:id="@+id/layout_step_ranking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/card_color">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_ranking_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Ai về Nhất?"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rg_rank_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Số cây đã ăn"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <RadioGroup
+                        android:id="@+id/rg_eaten_cards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+                        <RadioButton
+                            android:id="@+id/rb_mom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Móm (không ăn cây nào)"
+                            android:textColor="@color/text_primary"
+                            android:checked="true"/>
+                        <RadioButton
+                            android:id="@+id/rb_eaten_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ăn 1 cây"
+                            android:textColor="@color/text_primary"/>
+                        <RadioButton
+                            android:id="@+id/rb_eaten_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ăn 2 cây"
+                            android:textColor="@color/text_primary"/>
+                        <RadioButton
+                            android:id="@+id/rb_eaten_1_last"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ăn 1 cây + 1 chốt"
+                            android:textColor="@color/text_primary"/>
+                        <RadioButton
+                            android:id="@+id/rb_eaten_2_last"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ăn 2 cây chốt"
+                            android:textColor="@color/text_primary"/>
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btn_confirm_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tiếp tục"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/accent_color"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 5: Results -->
+        <LinearLayout
+            android:id="@+id/layout_step_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/card_color">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tổng kết ván"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_round_result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="16dp"
+                        tools:text="P1: +10\nP2: -2\nP3: -4\nP4: -4"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tổng điểm"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="16dp"/>
+
+                     <TextView
+                        android:id="@+id/tv_total_scores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="16dp"
+                        tools:text="P1: 10\nP2: -2\nP3: -4\nP4: -4"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_new_round"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="Ván mới"
+                        app:cornerRadius="8dp"/>
+                        
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_new_game_reset"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Chơi mới (Reset điểm)"
+                        app:cornerRadius="8dp"/>
+                        
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Step 5: Eaten Cards for Perfect Hand -->
+        <LinearLayout
+            android:id="@+id/step_eaten_cards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cây đã ăn khi Ù"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Player 1 Eaten Cards -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@color/card_color">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tv_player1_eaten_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Người chơi 1"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="8dp"/>
+
+                            <RadioGroup
+                                android:id="@+id/rg_player1_eaten_cards"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <RadioButton
+                                    android:id="@+id/rb_player1_eaten_0"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Không ăn cây nào"
+                                    android:textColor="@color/text_primary"
+                                    android:checked="true"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player1_eaten_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 1 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player1_eaten_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 2 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player1_eaten_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 3 cây (Ù đền)"
+                                    android:textColor="@color/text_primary"/>
+                            </RadioGroup>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Player 2 Eaten Cards -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@color/card_color">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tv_player2_eaten_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Người chơi 2"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="8dp"/>
+
+                            <RadioGroup
+                                android:id="@+id/rg_player2_eaten_cards"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <RadioButton
+                                    android:id="@+id/rb_player2_eaten_0"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Không ăn cây nào"
+                                    android:textColor="@color/text_primary"
+                                    android:checked="true"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player2_eaten_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 1 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player2_eaten_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 2 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player2_eaten_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 3 cây (Ù đền)"
+                                    android:textColor="@color/text_primary"/>
+                            </RadioGroup>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Player 3 Eaten Cards -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@color/card_color">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tv_player3_eaten_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Người chơi 3"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="8dp"/>
+
+                            <RadioGroup
+                                android:id="@+id/rg_player3_eaten_cards"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <RadioButton
+                                    android:id="@+id/rb_player3_eaten_0"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Không ăn cây nào"
+                                    android:textColor="@color/text_primary"
+                                    android:checked="true"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player3_eaten_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 1 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player3_eaten_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 2 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player3_eaten_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 3 cây (Ù đền)"
+                                    android:textColor="@color/text_primary"/>
+                            </RadioGroup>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Player 4 Eaten Cards -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="4dp"
+                        app:cardBackgroundColor="@color/card_color">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/tv_player4_eaten_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Người chơi 4"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="8dp"/>
+
+                            <RadioGroup
+                                android:id="@+id/rg_player4_eaten_cards"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <RadioButton
+                                    android:id="@+id/rb_player4_eaten_0"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Không ăn cây nào"
+                                    android:textColor="@color/text_primary"
+                                    android:checked="true"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player4_eaten_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 1 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player4_eaten_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 2 cây"
+                                    android:textColor="@color/text_primary"/>
+                                <RadioButton
+                                    android:id="@+id/rb_player4_eaten_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ăn 3 cây (Ù đền)"
+                                    android:textColor="@color/text_primary"/>
+                            </RadioGroup>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/btn_confirm_eaten_cards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tính điểm"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/accent_color"/>
+        </LinearLayout>
+
+    </ViewFlipper>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

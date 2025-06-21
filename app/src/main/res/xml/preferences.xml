@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Cài đặt điểm cơ bản"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            android:key="eaten_card_fee"
+            android:title="Điểm mỗi cây ăn"
+            android:summary="Điểm cho mỗi cây ăn được"
+            android:defaultValue="1"
+            android:dialogMessage="Nhập điểm cho mỗi cây"
+            android:inputType="number"/>
+            
+        <EditTextPreference
+            android:key="last_card_fee"
+            android:title="Điểm ăn cây chốt"
+            android:summary="Điểm phạt thêm khi bị ăn cây chốt"
+            android:defaultValue="4"
+            android:dialogMessage="Nhập điểm phạt"
+            android:inputType="number"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Cài đặt Ù"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            android:key="perfect_hand_points"
+            android:title="Điểm Ù thường"
+            android:summary="Điểm phạt cho mỗi người khi có người Ù (mặc định: 5)"
+            android:defaultValue="5"
+            android:dialogMessage="Nhập điểm phạt cho mỗi người"
+            android:inputType="number" />
+
+        <EditTextPreference
+            android:key="khan_hand_points"
+            android:title="Điểm Ù khan"
+            android:summary="Điểm phạt cho mỗi người khi có người Ù khan (mặc định: 7)"
+            android:defaultValue="7"
+            android:dialogMessage="Nhập điểm phạt cho mỗi người"
+            android:inputType="number" />
+
+        <EditTextPreference
+            android:key="perfect_hand_khan_bonus"
+            android:title="Điểm thưởng Ù khan"
+            android:summary="Điểm thưởng cho người Ù khan"
+            android:defaultValue="90"
+            android:inputType="number"/>
+
+        <EditTextPreference
+            android:key="perfect_hand_round_bonus"
+            android:title="Điểm Ù tròn"
+            android:summary="Điểm phạt cho mỗi người khi có người Ù tròn (mặc định: 6)"
+            android:defaultValue="6"
+            android:inputType="number"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Cài đặt phạt"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            android:key="mom_penalty_points"
+            android:title="Điểm phạt móm"
+            android:summary="Điểm bị trừ khi về bét và móm"
+            android:defaultValue="4"
+            android:inputType="number" />
+            
+        <EditTextPreference
+            android:key="first_player_bonus"
+            android:title="Điểm thưởng người chơi đầu"
+            android:summary="Điểm cộng cho người chơi đầu khi tất cả móm"
+            android:defaultValue="5"
+            android:inputType="number" />
+
+        <SwitchPreference
+            android:key="winner_is_first_player"
+            android:title="Người thắng ván trước là người chơi đầu"
+            android:summary="Tự động chọn người Ù làm người chơi đầu tiên"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Cài đặt khác"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            android:key="auto_save_names"
+            android:title="Tự động lưu tên"
+            android:summary="Lưu tên người chơi cho lần sau"
+            android:defaultValue="true" />
+
+        <EditTextPreference
+            android:key="eaten_card_bonus"
+            android:title="Điểm thưởng cây ăn được"
+            android:summary="Điểm thưởng cho cây ăn được (cây 1=1đ, cây 2=2đ)"
+            android:defaultValue="1"
+            android:inputType="number"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen> 
